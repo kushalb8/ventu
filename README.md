@@ -1,16 +1,22 @@
-## Recycling Production Line Manager Selection System
-
-### Setup
-
-1. Create DB and run sql/schema.sql
-2. Run backend:
-   npm install
-   node seed.js
-   node server.js
-
-3. Run frontend:
-   npm install
-   npm run dev
-
-Backend runs on :5000
-Frontend runs on :5173
+recycling-manager-system/
+│
+├── backend/
+│   ├── server.js
+│   ├── db.js
+│   ├── seed.js
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── main.jsx
+│   │   ├── App.jsx
+│   │   ├── Leaderboard.jsx
+│   │   ├── Heatmap.jsx
+│   │   └── CandidateCard.jsx
+│   └── package.json
+│
+├── sql/
+│   ├── schema.sql
+│   └── sample_data.sql
+│
+└── README.md
