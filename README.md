@@ -1,25 +1,24 @@
-import { useEffect, useState } from "react";
-import Leaderboard from "./Leaderboard";
-import CandidateCard from "./CandidateCard";
+import { useEffect,useState } from "react";
 
-function App(){
-  const [candidates,setCandidates]=useState([]);
+export default function Leaderboard(){
+  const [top,setTop]=useState([]);
 
   useEffect(()=>{
-    fetch("http://localhost:5000/candidates")
+    fetch("http://localhost:5000/leaderboard")
       .then(r=>r.json())
-      .then(setCandidates);
+      .then(setTop);
   },[]);
 
   return (
-    <div style={{padding:20}}>
-      <h1>Recycling Manager Dashboard</h1>
-      <Leaderboard/>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:15}}>
-        {candidates.map(c=><CandidateCard key={c.id} data={c}/>)}
-      </div>
-    </div>
+    <>
+      <h2>Top 10 Candidates</h2>
+      <ol>
+        {top.map(t=>(
+          <li key={t.rank_position}>
+            {t.name} - {t.total_score.toFixed(2)}
+          </li>
+        ))}
+      </ol>
+    </>
   )
 }
-
-export default App;
