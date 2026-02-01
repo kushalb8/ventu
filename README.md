@@ -1,27 +1,30 @@
+const express = require("express");
+const cors = require("cors");
 const db = require("./db");
-const { faker } = require("@faker-js/faker");
 
-for(let i=0;i<40;i++){
-  const name = faker.person.fullName();
-  const exp = faker.number.int({min:1,max:15});
-  const skills = faker.helpers.arrayElements(
-    ["Leadership","Safety","AI","Operations","Lean","Sustainability"],
-    3
-  ).join(",");
+const app = express();
+app.use(cors());
 
-  db.query(
-    "INSERT INTO candidates (name,experience,skills) VALUES (?,?,?)",
-    [name,exp,skills]
-  );
+app.get("/leaderboard",(req,res)=>{
+  db.query(`
+    SELECT c.name, r.total_score, r.rank_position
+    FROM rankings r
+    JOIN candidates c ON c.id=r.candidate_id
+    ORDER BY r.rank_position
+    LIMIT 10
+  `,(err,data)=>{
+    res.json(data);
+  });
+});
 
-  const crisis = faker.number.float({min:5,max:10});
-  const sustain = faker.number.float({min:5,max:10});
-  const team = faker.number.float({min:5,max:10});
+app.get("/candidates",(req,res)=>{
+  db.query(`
+    SELECT c.*, e.crisis_score, e.sustainability_score, e.team_score
+    FROM candidates c
+    JOIN evaluations e ON c.id=e.candidate_id
+  `,(err,data)=>{
+    res.json(data);
+  });
+});
 
-  db.query(
-    "INSERT INTO evaluations (candidate_id,crisis_score,sustainability_score,team_score) VALUES (LAST_INSERT_ID(),?,?,?)",
-    [crisis,sustain,team]
-  );
-}
-
-console.log("40 candidates added");
+app.listen(5000,()=>console.log("Backend running on 5000"));
