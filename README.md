@@ -1,24 +1,11 @@
-CREATE DATABASE recycling_system;
-USE recycling_system;
+INSERT INTO rankings (candidate_id, total_score)
+SELECT 
+  candidate_id,
+  (crisis_score + sustainability_score + team_score)/3
+FROM evaluations;
 
-CREATE TABLE candidates (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    experience INT,
-    skills TEXT
-);
+SET @r=0;
 
-CREATE TABLE evaluations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    candidate_id INT,
-    crisis_score FLOAT,
-    sustainability_score FLOAT,
-    team_score FLOAT,
-    FOREIGN KEY (candidate_id) REFERENCES candidates(id)
-);
-
-CREATE TABLE rankings (
-    candidate_id INT PRIMARY KEY,
-    total_score FLOAT,
-    rank_position INT
-);
+UPDATE rankings
+SET rank_position = (@r:=@r+1)
+ORDER BY total_score DESC;
