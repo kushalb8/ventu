@@ -1,24 +1,12 @@
-import { useEffect,useState } from "react";
-
-export default function Leaderboard(){
-  const [top,setTop]=useState([]);
-
-  useEffect(()=>{
-    fetch("http://localhost:5000/leaderboard")
-      .then(r=>r.json())
-      .then(setTop);
-  },[]);
-
+export default function CandidateCard({data}){
   return (
-    <>
-      <h2>Top 10 Candidates</h2>
-      <ol>
-        {top.map(t=>(
-          <li key={t.rank_position}>
-            {t.name} - {t.total_score.toFixed(2)}
-          </li>
-        ))}
-      </ol>
-    </>
+    <div style={{border:"1px solid #ccc",padding:10}}>
+      <h3>{data.name}</h3>
+      <p>Experience: {data.experience} yrs</p>
+      <p>Skills: {data.skills}</p>
+      <p>Crisis: {data.crisis_score}</p>
+      <p>Sustainability: {data.sustainability_score}</p>
+      <p>Team: {data.team_score}</p>
+    </div>
   )
 }
